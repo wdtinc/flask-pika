@@ -1,13 +1,6 @@
 #AMQP Pika Extension for Flask
 This extension provides a simple way to expose an AMQP channel per request over a per thread connection to an AMQP server.
 
-##Creating the AMQP object
-Create a scoped file to hold a global AMQP instance. Import the AMQP flask extension and create an instance of it for use by any class that imports it.
-
-	from flask.ext.amqp import AMQP 
-
-	amqp = AMQP()
-
 ##Initializing the AMQP object
 Simply initialize the AMQP instance with the app and a Pika connection params object.
 
