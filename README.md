@@ -5,9 +5,11 @@ This extension provides a simple way to expose an AMQP channel per request over 
 Simply initialize the AMQP instance with the app and a Pika connection params object.
 
 	from flask import Flask
+	from flask.ext.amqp import AMQP
 	import pika
 
 	app = Flask(__name__)
+	amqp = AMQP()
 	amqp.init_app(app, pika.ConnectionParameters(
 							host='amqp host', //amqp.server.com
 					 credentials=pika.PlainCredentials('username','password'), //username and password of amqp user
