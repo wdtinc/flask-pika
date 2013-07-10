@@ -11,7 +11,7 @@ except ImportError:
     from flask import _request_ctx_stack as stack
 
 
-class AMQP(object):
+class Pika(object):
 
     def __init__(self, app=None, pika_connection_params = None):
         self.app = app
