@@ -17,6 +17,7 @@ setup(
     long_description=__doc__,
     zip_safe=False,
     include_package_data=True,
+    py_modules=['flask_pika'],
     platforms='any',
     install_requires=[
         'Flask',
