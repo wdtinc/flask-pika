@@ -22,7 +22,7 @@ class Pika(object):
         # Use the newstyle teardown_appcontext if it's available,
         # otherwise fall back to the request context
         self._pika_connection_params = pika_connection_params
-        self._thread_local = threading.local()
+        self._threadLocal = threading.local()
         if hasattr(app, 'teardown_appcontext'):
             app.teardown_appcontext(self.teardown)
         else:
@@ -32,7 +32,8 @@ class Pika(object):
         pika_connection = getattr(self._threadLocal, 'pika_connection', None)
         if pika_connection is None or not pika_connection.is_open :
             #Create connection
-            self._threadLocal.pika_connection = pika.BlockingConnection(self._pika_connection_params)
+            pika_connection = pika.BlockingConnection(self._pika_connection_params)
+            self._threadLocal.pika_connection = pika_connection
         return pika_connection.channel()
 
     def teardown(self, exception):
