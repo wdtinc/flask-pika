@@ -19,8 +19,6 @@ class Pika(object):
             self.init_app(app, pika_params)
 
     def init_app(self, app, pika_params = None):
-        # Use the newstyle teardown_appcontext if it's available,
-        # otherwise fall back to the request context
         if pika_params is None:
             pika_params = app.config.get('PIKA_PARAMS', None)
         if 'credentials' not in pika_params:
@@ -29,6 +27,8 @@ class Pika(object):
             del pika_params['password']
         self._pika_connection_params = pika.ConnectionParameters(**pika_params)
         self._threadLocal = threading.local()
+        # Use the newstyle teardown_appcontext if it's available,
+        # otherwise fall back to the request context
         if hasattr(app, 'teardown_appcontext'):
             app.teardown_appcontext(self.teardown)
         else:

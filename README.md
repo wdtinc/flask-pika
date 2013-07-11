@@ -21,7 +21,7 @@ Simply initialize the Flask Pika instance with the app and a Pika connection par
 	fpika.init_app(app)
 	
 ##Using the Pika object
-Use the amqp object you created and get a channel.
+Use the pika object you created and get a channel.
 
 	fpika.channel.basic_publish(exchange='exchange',routing_key='routing_key',body='message')
 		
