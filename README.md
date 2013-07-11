@@ -8,7 +8,6 @@ Simply initialize the Flask Pika instance with the app and a Pika connection par
 
 	from flask import Flask
 	from flask.ext.pika import Pika as FPika
-	import pika
 
 	app = Flask(__name__)
     app.config['PIKA_PARAMS'] = {
