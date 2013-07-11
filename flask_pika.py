@@ -21,7 +21,10 @@ class Pika(object):
     def init_app(self, app, pika_connection_params):
         # Use the newstyle teardown_appcontext if it's available,
         # otherwise fall back to the request context
-        self._pika_connection_params = pika_connection_params
+        if pika_connection_params is None:
+            self._pika_connection_params = app.config.get('PIKA_PARAMS', None)
+        else:
+            self._pika_connection_params = pika_connection_params
         self._threadLocal = threading.local()
         if hasattr(app, 'teardown_appcontext'):
             app.teardown_appcontext(self.teardown)
