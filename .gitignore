@@ -1,3 +1,7 @@
+*.pyc
+*~
+*.swp
+*.swo
+*.egg-info
 build
 dist
-Flask_Pika.egg-info
