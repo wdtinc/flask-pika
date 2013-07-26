@@ -1,6 +1,7 @@
 import pika
 import threading
 from flask import current_app
+import warnings
 
 # Find the stack on which we want to store the database connection.
 # Starting with Flask 0.9, the _app_ctx_stack is the correct one,
@@ -27,12 +28,6 @@ class Pika(object):
             del pika_params['password']
         self._pika_connection_params = pika.ConnectionParameters(**pika_params)
         self._threadLocal = threading.local()
-        # Use the newstyle teardown_appcontext if it's available,
-        # otherwise fall back to the request context
-        if hasattr(app, 'teardown_appcontext'):
-            app.teardown_appcontext(self.teardown)
-        else:
-            app.teardown_request(self.teardown)
 
     def create_channel(self):
         pika_connection = getattr(self._threadLocal, 'pika_connection', None)
@@ -40,17 +35,15 @@ class Pika(object):
             #Create connection
             pika_connection = pika.BlockingConnection(self._pika_connection_params)
             self._threadLocal.pika_connection = pika_connection
+            warnings.warn("Creating AMQP Connection")
+        warnings.warn("Creating AMQP Channel")
         return pika_connection.channel()
-
-    def teardown(self, exception):
-        ctx = stack.top
-        if hasattr(ctx, 'pika_channel'):
-            ctx.pika_channel.close()
 
     @property
     def channel(self):
-        ctx = stack.top
-        if ctx is not None:
-            if not hasattr(ctx, 'pika_channel'):
-                ctx.pika_channel = self.create_channel()
-            return ctx.pika_channel
+        if self._threadLocal is not None:
+            ch = getattr(self._threadLocal, 'pika_channel', None)
+            if ch is None or not ch.is_open:
+                ch = self.create_channel()
+                self._threadLocal.pika_channel = ch
+            return ch
