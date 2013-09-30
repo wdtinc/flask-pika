@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup(
     name='Flask-Pika',
-    version='0.2.2',
+    version='0.2.2p0',
     url='https://github.com/WeatherDecisionTechnologies/flask-pika',
     license='BSD',
     author='Weather Decision Technologies',
@@ -21,7 +21,7 @@ setup(
     platforms='any',
     install_requires=[
         'Flask',
-        'pika==0.9.13'
+        'pika==0.9.14p0'
     ],
     classifiers=[
         'Environment :: Web Environment',
