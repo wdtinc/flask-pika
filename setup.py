@@ -22,7 +22,7 @@ setup(
     py_modules=['flask_pika'],
     platforms='any',
     install_requires=[
-        'Flask',
+        'Flask>=0.7',
         'pika==0.9.14p0'
     ],
     classifiers=[

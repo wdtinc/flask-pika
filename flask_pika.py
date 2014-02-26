@@ -24,9 +24,7 @@ class Pika(object):
         pika_params = app.config['FLASK_PIKA_PARAMS']
         pool_params = app.config['FLASK_PIKA_POOL_PARAMS']
 
-        if app.debug:
-            self.debug = True
-
+        self.debug = app.debug
         self.logger = app.logger
         self.pool_size = 1
         self.pool_recycle = -1
