@@ -45,8 +45,9 @@ class Pika(object):
             self.pool_size = pool_params['pool_size']
             self.pool_recycle = pool_params['pool_recycle']
             for i in xrange(self.pool_size):
-                ch = self.__create_channel()
-                self.pool_queue.put(ch)
+                channel = PrePopulationChannel()
+                self.__set_recycle_for_channel(channel, -1)
+                self.pool_queue.put(channel)
             self.__DEBUG("Pool params are %s" % pool_params)
 
 
@@ -73,11 +74,15 @@ class Pika(object):
             self.__WARN("Failed to destroy channel cleanly %s" % e)
 
 
-    def __set_recycle_for_channel(self, channel):
+    def __set_recycle_for_channel(self, channel, recycle_time = None):
         """
             Set the next recycle time for a channel
         """
-        self.channel_recycle_times[hash(channel)] = (unix_time_millis_now() + (self.pool_recycle * 1000))
+        if recycle_time is None:
+            recycle_time = (unix_time_millis_now() + (self.pool_recycle * 1000))
+
+        self.channel_recycle_times[hash(channel)] = recycle_time
+
 
 
     def __remove_recycle_time_for_channel(self, channel):
@@ -182,6 +187,26 @@ class Pika(object):
             Log a message at warning level
         """
         self.logger.warn(msg)
+
+
+class PrePopulationChannel(object):
+
+    def __init__(self):
+        self._connection = PrePopulationConnection()
+
+    @property
+    def connection(self):
+        return self._connection
+
+
+class PrePopulationConnection(object):
+
+    def __init__(self):
+        pass
+
+    def close(self):
+        pass
+
    
 def unix_time(dt):
     """
@@ -191,11 +216,13 @@ def unix_time(dt):
     delta = dt - epoch
     return int((delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10**6) / 10**6)
 
+
 def unix_time_millis(dt):
     """
         Return unix time in milliseconds
     """
     return round(unix_time(dt) * 1000.0)
+
 
 def unix_time_millis_now():
     """
