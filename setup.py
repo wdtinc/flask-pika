@@ -1,14 +1,16 @@
 """
 Flask-Pika
 -------------
-Provides a pika channel per request with a single persistant connection per thread to an amqp server
+This extension provides a simple way to expose a Pika blocking channel inside of Flask.
+
+Once a channel is obtained, use it as you would any normal Pika blocking channel.
 """
 from setuptools import setup
 
 
 setup(
     name='Flask-Pika',
-    version='0.2.2p0',
+    version='0.3.0',
     url='https://github.com/WeatherDecisionTechnologies/flask-pika',
     license='BSD',
     author='Weather Decision Technologies',

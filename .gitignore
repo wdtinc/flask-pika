@@ -5,3 +5,5 @@
 *.egg-info
 build
 dist
+*.egg
+_env
