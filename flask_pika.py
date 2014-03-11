@@ -141,7 +141,7 @@ class Pika(object):
     def return_channel(self, channel):
         """
             Return a channel
-            If pooling is setup, will return the channel to the channel pool 
+            If pooling is setup, will return the channel to the channel pool
                 **unless** the channel is closed, then channel is passed to return_broken_channel
             If pooling is not setup, will destroy the channel
         """
@@ -168,7 +168,7 @@ class Pika(object):
         if self.pool_recycle > -1:
             self.__WARN("Pika channel returned in broken state, replacing %s" % channel)
             self.__destroy_channel(channel)
-            self.pool_queue.put(__create_channel())
+            self.pool_queue.put(self.__create_channel())
 
         #if not using pooling then just destroy the channel
         else:
@@ -207,7 +207,7 @@ class PrePopulationConnection(object):
     def close(self):
         pass
 
-   
+
 def unix_time(dt):
     """
         Return unix time in microseconds
