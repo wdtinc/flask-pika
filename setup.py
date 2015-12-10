@@ -23,7 +23,7 @@ setup(
     platforms='any',
     install_requires=[
         'Flask>=0.7',
-        'pika==0.9.14p0'
+        'pika==0.9.14'
     ],
     classifiers=[
         'Environment :: Web Environment',
