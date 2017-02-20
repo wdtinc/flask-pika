@@ -2,7 +2,16 @@ import datetime
 import pika
 import warnings
 
-from Queue import Queue
+# python-3 compatibility
+try:
+    from Queue import Queue
+except ImportError as e:
+    from queue import Queue
+
+try:
+    from Queue import Queue
+except ImportError as e:
+    from queue import Queue
 
 __all__ = ['Pika']
 
@@ -70,7 +79,7 @@ class Pika(object):
         try:
             channel.connection.close()
             self.__DEBUG("Destroyed AMQP Connection and Channel %s" % channel)
-        except Exception, e:
+        except Exception as e:
             self.__WARN("Failed to destroy channel cleanly %s" % e)
 
 
