@@ -1,6 +1,7 @@
 import datetime
 import pika
 import warnings
+from pika import connection
 
 # python-3 compatibility
 try:
@@ -42,12 +43,15 @@ class Pika(object):
         self.channel_recycle_times = {}
 
         # fix create credentials if needed
-        if 'credentials' not in pika_params:
-            pika_params['credentials'] = pika.PlainCredentials(pika_params['username'], pika_params['password'])
-            del pika_params['username']
-            del pika_params['password']
+        if isinstance(pika_params, connection.Parameters):
+            self._pika_connection_params = pika_params
+        else:
+            if 'credentials' not in pika_params:
+                pika_params['credentials'] = pika.PlainCredentials(pika_params['username'], pika_params['password'])
+                del pika_params['username']
+                del pika_params['password']
+            self._pika_connection_params = pika.ConnectionParameters(**pika_params)
 
-        self._pika_connection_params = pika.ConnectionParameters(**pika_params)
         self.__DEBUG("Connection params are %s" % self._pika_connection_params)
 
         # setup pooling if requested
