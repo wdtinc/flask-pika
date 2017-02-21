@@ -50,8 +50,8 @@ class Pika(object):
                 pika_params['credentials'] = pika.PlainCredentials(pika_params['username'], pika_params['password'])
                 del pika_params['username']
                 del pika_params['password']
+            self._pika_connection_params = pika.ConnectionParameters(**pika_params)
 
-        self._pika_connection_params = pika.ConnectionParameters(**pika_params)
         self.__DEBUG("Connection params are %s" % self._pika_connection_params)
 
         # setup pooling if requested
