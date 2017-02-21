@@ -9,9 +9,10 @@ except ImportError as e:
     from queue import Queue
 
 try:
-    from Queue import Queue
-except ImportError as e:
-    from queue import Queue
+    xrange
+except NameError as e:
+    xrange = range
+
 
 __all__ = ['Pika']
 
