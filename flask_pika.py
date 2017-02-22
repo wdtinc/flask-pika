@@ -149,6 +149,11 @@ class Pika(object):
             # create a new channel
             ch = self.__create_channel()
 
+        # add support context manager
+        def close():
+            self.return_channel(ch)
+        ch = ProxyContextManager(instance=ch, close_callback=close)
+
         return ch
 
 
@@ -243,3 +248,28 @@ def unix_time_millis_now():
         Return current unix time in milliseconds
     """
     return unix_time_millis(datetime.datetime.utcnow())
+
+
+class ProxyContextManager(object):
+    """
+        working as proxy object or as context manager for object
+    """
+    def __init__(self, instance, close_callback=None):
+        self.instance = instance
+        self.close_callback = close_callback
+
+    def __getattr__(self, key):
+        try:
+            return object.__getattribute__(self, key)
+        except AttributeError:
+            return getattr(self.instance, key)
+
+    def __enter__(self):
+        return self.instance
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        if self.close_callback:
+            self.close_callback()
+        else:
+            self.instance.close()
+
