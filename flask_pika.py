@@ -33,7 +33,7 @@ class Pika(object):
             Initialize the Flask Pika extension
         """
         pika_params = app.config['FLASK_PIKA_PARAMS']
-        pool_params = app.config['FLASK_PIKA_POOL_PARAMS']
+        pool_params = app.config.get('FLASK_PIKA_POOL_PARAMS', None)
 
         self.debug = app.debug
         self.logger = app.logger
